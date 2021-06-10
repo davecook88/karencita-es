@@ -13,7 +13,7 @@ type Props = {
 const StaticPropsDetail = ({ item, errors }: Props) => {
   if (errors) {
     return (
-      <Layout title="Error | Next.js + TypeScript Example">
+      <Layout showNav={true} title="Error | Next.js + TypeScript Example">
         <p>
           <span style={{ color: "red" }}>Error:</span> {errors}
         </p>
@@ -23,6 +23,7 @@ const StaticPropsDetail = ({ item, errors }: Props) => {
 
   return (
     <Layout
+      showNav={true}
       title={`${
         item ? item.name : "User Detail"
       } | Next.js + TypeScript Example`}

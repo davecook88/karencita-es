@@ -5,6 +5,27 @@
 // import { User } from 'path/to/interfaces';
 
 export type User = {
-  id: number
-  name: string
+  id: number;
+  name: string;
+};
+
+export namespace PlacementTestConfig {
+  export interface Test {
+    id: string;
+    slug: string;
+    questions: Question[];
+    description: string;
+    image: Image;
+    name: string;
+  }
+
+  export interface Question {
+    type: "multiple-choice";
+    questionText: string;
+    answer: number | string;
+  }
+  interface Image {
+    url: string;
+    title: string;
+  }
 }

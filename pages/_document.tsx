@@ -14,6 +14,12 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
+          <link rel="stylesheet" href="/styles.css" />
+          <link rel="preconnect" href="https://fonts.gstatic.com"></link>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat&family=Nunito:wght@200&display=swap"
+            rel="stylesheet"
+          ></link>
         </Head>
         <body style={{ margin: 0 }}>
           <Main />

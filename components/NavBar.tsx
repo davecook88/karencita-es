@@ -38,7 +38,7 @@ export default function ButtonAppBar() {
             <Menu />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            News
+            La Karencita
           </Typography>
           {/* <Button color="inherit">Login</Button> */}
         </Toolbar>
