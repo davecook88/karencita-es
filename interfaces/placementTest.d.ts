@@ -1,6 +1,5 @@
 export namespace PlacementTestTypes {
   export interface TestStructure {
-    id: string;
     slug: string;
     description: string;
     image: Image;
@@ -14,6 +13,18 @@ export namespace PlacementTestTypes {
     answers: Answer[];
   }
 
+  export interface GetTestApiResponse extends Test {
+    id: string;
+  }
+
+  export interface GetTestStructureApiResponse extends TestStructure {
+    id: string;
+  }
+
+  export interface GetTestCompleteApiResponse extends TestComplete {
+    id: string;
+  }
+
   export interface Question {
     id: string;
     type: "multiple-choice";
@@ -22,7 +33,8 @@ export namespace PlacementTestTypes {
 
   export interface Answer {
     questionId: string;
-    answer: number | string;
+    answer?: string;
+    answerIndex?: number;
   }
   interface Image {
     url: string;
