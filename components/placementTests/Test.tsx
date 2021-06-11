@@ -9,14 +9,14 @@ import {
   Typography,
   Zoom,
 } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
+
 import Link from "next/link";
 import React, { useState } from "react";
-import { PlacementTestConfig } from "../../interfaces";
-import Layout from "../Layout";
-
-interface TestProps {
-  test: PlacementTestConfig.Test;
-}
+import UserModel from "../../models/User";
+import mongoose from "mongoose";
+import { UserTypes } from "../../interfaces/user";
+import { PlacementTestTypes } from "../../interfaces/placementTest";
 
 const useStyles = makeStyles((theme) => ({
   unsubscribeSection: {
@@ -24,16 +24,48 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PreTestWindow = ({ startTest }: { startTest: Function }) => {
+const PreTestWindow = ({
+  startTest,
+  setError,
+}: {
+  startTest: Function;
+  setError: Function;
+}) => {
   const [checked, setChecked] = useState(false);
   const [slideOut, setSlideOut] = useState(false);
+  const [email, setEmail] = useState("");
 
   const classes = useStyles();
 
   const onSubmitEmailClick = () => {
-    setSlideOut(true);
-    setTimeout(startTest, 100);
+    if (email.indexOf("@") === -1) {
+      setError("Please enter an email address");
+      return;
+    }
+
+    const user: UserTypes.CreateUserPayload = {
+      email: email,
+      emailUnsubscribed: checked,
+    };
+
+    fetch("/api/users", {
+      body: JSON.stringify(user),
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      if (res.ok) {
+        console.log(res);
+        setSlideOut(true);
+        setTimeout(startTest, 100);
+      } else {
+        setError("Error saving email");
+      }
+    });
   };
+
   return (
     <Grid item xs={12}>
       <Zoom in={!slideOut} mountOnEnter unmountOnExit>
@@ -43,16 +75,19 @@ const PreTestWindow = ({ startTest }: { startTest: Function }) => {
             id="standard-required"
             fullWidth
             label="Enter your email address to begin"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             // defaultValue="Hello World"
           />
           <Grid
             container
+            item
             justify="space-between"
             className={classes.unsubscribeSection}
             xs={12}
             spacing={4}
           >
-            <Grid item container spacing={2}>
+            <Grid item container xs={12} spacing={2}>
               <Grid item xs={2}>
                 <Checkbox
                   checked={checked}
@@ -83,17 +118,21 @@ const PreTestWindow = ({ startTest }: { startTest: Function }) => {
   );
 };
 
-export const Test = ({ test }: TestProps) => {
+export const Test = ({ test }: { test: PlacementTestTypes.Test }) => {
   // Set to true when email address is entered to begin showing questions
   const [started, setStarted] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   // Get the email address before starting the test
   if (!started) {
-    return <PreTestWindow startTest={() => setStarted(true)} />;
+    return (
+      <PreTestWindow startTest={() => setStarted(true)} setError={setError} />
+    );
   } else {
     return (
       <Grid item xs={12}>
         <FormControl fullWidth></FormControl>
+        {error && <Alert severity="error">{error}</Alert>}
       </Grid>
     );
   }

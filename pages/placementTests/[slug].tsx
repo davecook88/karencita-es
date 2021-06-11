@@ -86,6 +86,3 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 export default PlacementTest;
-function ctx(): string {
-  throw new Error("Function not implemented.");
-}
