@@ -3,7 +3,12 @@ import { PlacementTestTypes } from "../interfaces/placementTest";
 
 const QuestionSchema = new mongoose.Schema<PlacementTestTypes.TestComplete>({
   questionText: { type: String },
+  choices: [{
+    displayText: { type: String },
+    id: { type: Number }
+  }],
   type: { type: String },
+  answers: [{ type: Schema.Types.ObjectId, ref: "Answer" }],
 });
 
 export const QuestionModel =
@@ -14,8 +19,8 @@ export const QuestionModel =
   >) || mongoose.model<PlacementTestTypes.Question>("Question", QuestionSchema);
 
 const AnswerSchema = new mongoose.Schema<PlacementTestTypes.TestComplete>({
-  answer: { type: String },
-  answerIndex: { type: Number },
+  answer: [{ type: String }],
+  answerIndex: [{ type: Number }],
   type: { type: String },
 });
 
@@ -46,7 +51,11 @@ const PlacementTestSchema =
       },
     },
     questions: [{ type: Schema.Types.ObjectId, ref: "Question" }],
-    answers: [{ type: Schema.Types.ObjectId, ref: "Answer" }],
+
+    slug: {
+      type: String,
+      required: true,
+    },
   });
 
 export const PlacementTestModel =

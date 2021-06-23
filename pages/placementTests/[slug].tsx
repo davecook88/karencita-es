@@ -11,8 +11,9 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Layout from "../../components/Layout";
 import { Test } from "../../components/placementTests/Test";
+import { PlacementTestTypes } from "../../interfaces/placementTest";
+import { PlacementTestModel } from "../../models/PlacementTest";
 
-import { PlacementTestConfig } from "../../interfaces";
 import {
   getAllPlacementTests,
   getPlacementTest,
@@ -26,7 +27,7 @@ const useStyles = makeStyles({
   },
 });
 
-const PlacementTest = (props: { item: PlacementTestConfig.Test }) => {
+const PlacementTest = (props: { item: PlacementTestTypes.TestStructure }) => {
   console.log(props);
   const router = useRouter();
   const classes = useStyles();
@@ -52,7 +53,7 @@ const PlacementTest = (props: { item: PlacementTestConfig.Test }) => {
             className={clsx(classes.questionCard)}
             alignItems="center"
           >
-            <Test test={props.item}></Test>
+            {/* <Test test={props.item}></Test> */}
           </Grid>
         </Grid>
       </Container>
@@ -62,7 +63,8 @@ const PlacementTest = (props: { item: PlacementTestConfig.Test }) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   // Get the paths we want to pre-render based on users
-  const tests = await getAllPlacementTests();
+
+  const tests = await PlacementTestModel.find({});
   const paths = tests.map((test) => ({
     params: { slug: test.slug.toString() },
   }));
@@ -76,10 +78,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const slug = params.slug instanceof Array ? params.slug[0] : params.slug;
 
-    const item = await getPlacementTest(slug);
-    // By returning { props: item }, the StaticPropsDetail component
-    // will receive `item` as a prop at build time
-    return { props: { item } };
+    const result = await PlacementTestModel.find({});
+    const tests = result.map((doc) => {
+      const test = doc.toObject();
+      test._id = test._id.toString();
+      return test;
+    });
+    return {
+      props: {
+        tests: tests || [],
+      },
+    };
   } catch (err) {
     return { props: { errors: err.message } };
   }

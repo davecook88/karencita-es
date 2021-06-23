@@ -1,4 +1,5 @@
-import { PlacementTestConfig, User } from "../interfaces";
+import { User } from "../interfaces";
+import { PlacementTestTypes } from "../interfaces/placementTest";
 
 /** Dummy user data. */
 export const sampleUserData: User[] = [
@@ -8,7 +9,7 @@ export const sampleUserData: User[] = [
   { id: 104, name: "Dave" },
 ];
 
-export const placementTestData: PlacementTestConfig.Test[] = [
+export const placementTestData: PlacementTestTypes.Test[] = [
   {
     slug: "thrive-in-spanish-conversation",
     id: "0",

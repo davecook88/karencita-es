@@ -13,7 +13,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         ); /* find all the data in our database */
         res.status(200).json({ success: true, data: users });
       } catch (error) {
-        res.status(400).json({ success: false });
+        console.log(error);
+        res.status(400).json({ success: false, error });
       }
       break;
     case "POST":
